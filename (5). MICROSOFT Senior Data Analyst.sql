@@ -18,10 +18,12 @@ CREATE TABLE products (
 
 /*
 💡 Problem Statement
-A Microsoft Azure Supercloud customer is defined as a customer who has purchased at least one product from every product category listed in the products table.
+A Microsoft Azure Supercloud customer is defined as a customer who has purchased at least 
+one product from every product category listed in the products table.
 
 🟢 Objective
-The goal is to write a query that identifies the customer IDs of Supercloud customers—those who have made at least one purchase in each product category.
+The goal is to write a query that identifies the customer IDs of 
+Supercloud customers—those who have made at least one purchase in each product category.
 */
 
 -- Step 3: SQL Query
