@@ -1,0 +1,67 @@
+-- Step 1: Create Tables and Insert Sample Data
+CREATE TABLE Customer_Contracts (
+    customer_id INT,
+    product_id INT,
+    amount INT
+);
+
+INSERT INTO Customer_Contracts (customer_id, product_id, amount) VALUES
+(1, 1, 1000),
+(1, 3, 2000),
+(1, 5, 1500),
+(2, 2, 3000),
+(2, 6, 2000);
+
+CREATE TABLE Products (
+    product_id INT,
+    product_category VARCHAR(50),
+    product_name VARCHAR(100)
+);
+
+INSERT INTO Products (product_id, product_category, product_name) VALUES
+(1, 'Analytics', 'Azure Databricks'),
+(2, 'Analytics', 'Azure Stream Analytics'),
+(4, 'Containers', 'Azure Kubernetes Service'),
+(5, 'Containers', 'Azure Service Fabric'),
+(6, 'Compute', 'Virtual Machines'),
+(7, 'Compute', 'Azure Functions');
+
+-- Step 2: Problem Statement
+/*
+💡 Problem Statement
+Microsoft wants to identify its Supercloud customers. 
+A Supercloud customer is defined as a customer who has purchased at least one product 
+from every product category listed in the Products table.
+
+🟢 Objective
+Write a query to identify the customer IDs of all Supercloud customers. 
+*/
+
+-- Step 3: Solution Using Common Table Expressions (CTEs)
+WITH Total_Categories AS (
+    SELECT COUNT(DISTINCT product_category) AS total_categories
+    FROM Products
+),
+Customer_Categories AS (
+    SELECT 
+        c.customer_id,
+        COUNT(DISTINCT p.product_category) AS categories_purchased
+    FROM Customer_Contracts c
+    INNER JOIN Products p
+    ON c.product_id = p.product_id
+    GROUP BY c.customer_id
+)
+SELECT customer_id
+FROM Customer_Categories, Total_Categories
+WHERE categories_purchased = total_categories;
+
+-- Sol 2:
+SELECT c.customer_id
+FROM Customer_Contracts AS c
+INNER JOIN Products AS p
+ON c.product_id = p.product_id
+GROUP BY c.customer_id
+HAVING COUNT(DISTINCT p.product_category) = (
+    SELECT COUNT(DISTINCT product_category)
+    FROM Products
+);
